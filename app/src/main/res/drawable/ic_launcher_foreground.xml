@@ -1,0 +1,75 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- 배경 원 -->
+    <path
+        android:fillColor="#2196F3"
+        android:pathData="M54,54m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+    
+    <!-- 온도계 바깥쪽 원 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,54m-35,0a35,35 0,1 1,70 0a35,35 0,1 1,-70 0" />
+    
+    <!-- 온도계 내부 원 -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M54,54m-25,0a25,25 0,1 1,50 0a25,25 0,1 1,-50 0" />
+    
+    <!-- 온도계 눈금들 -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,20 L54,25" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,30 L54,35" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,40 L54,45" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,50 L54,55" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,60 L54,65" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,70 L54,75" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:pathData="M54,80 L54,85" />
+    
+    <!-- 온도계 수은주 (동적) -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M54,85 L54,45 L58,45 L58,85 Z" />
+    
+    <!-- 온도계 구 -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M54,85m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    
+    <!-- 알람 표시 (느낌표) -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M75,30 L75,50 L80,50 L80,55 L75,55 L75,65 L70,65 L70,55 L65,55 L65,50 L70,50 L70,30 Z" />
+    
+    <!-- 온도 숫자 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,35 L48,45 L52,45 L52,35 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,35 L50,45" />
+    
+</vector>
