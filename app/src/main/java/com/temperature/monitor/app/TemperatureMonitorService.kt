@@ -73,7 +73,8 @@ class TemperatureMonitorService : Service() {
         // 알람 쿨다운 초기화
         resetAlarmCooldown()
         
-        // 센서 등록
+        // 센서 초기화 및 등록
+        initializeTemperatureSensor()
         val sensor = temperatureSensor
         if (sensor != null) {
             sensorManager?.registerListener(
@@ -81,10 +82,16 @@ class TemperatureMonitorService : Service() {
                 sensor,
                 SensorManager.SENSOR_DELAY_NORMAL
             )
+            android.util.Log.d("TemperatureMonitor", "센서 등록 완료: ${sensor.name}")
+        } else {
+            android.util.Log.d("TemperatureMonitor", "등록할 센서가 없습니다")
         }
         
         serviceScope.launch {
-            // 즉시 첫 번째 온도 측정
+            // 센서 등록 후 잠시 대기 (첫 번째 센서 이벤트를 기다림)
+            delay(2000)
+            
+            // 첫 번째 온도 측정
             val initialTemperature = getCurrentTemperature()
             updateNotification("현재 온도: ${initialTemperature}°C")
             sendTemperatureUpdate(initialTemperature)
@@ -156,13 +163,16 @@ class TemperatureMonitorService : Service() {
     }
     
     private fun getCurrentTemperature(): Double {
-        return if (temperatureSensor != null && currentTemperature > 0) {
+        val result = if (temperatureSensor != null && currentTemperature > 0) {
             // 실제 센서 값 사용 (센서가 있고 유효한 값이 있을 때)
             currentTemperature
         } else {
             // 센서가 없거나 유효하지 않은 경우 안정적인 기본값
             25.0
         }
+        
+        android.util.Log.d("TemperatureMonitor", "getCurrentTemperature() 호출 - 센서: ${temperatureSensor?.name}, 현재값: $currentTemperature, 반환값: $result")
+        return result
     }
     
     private fun triggerAlarm(temperature: Double) {
@@ -354,6 +364,8 @@ class TemperatureMonitorService : Service() {
     private val sensorEventListener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent?) {
             event?.let {
+                android.util.Log.d("TemperatureMonitor", "센서 이벤트 수신: ${it.sensor.name} (타입: ${it.sensor.type})")
+                
                 // 온도 센서 타입 체크 (더 포괄적으로)
                 if (it.sensor.type == Sensor.TYPE_AMBIENT_TEMPERATURE || 
                     it.sensor.type == Sensor.TYPE_TEMPERATURE ||
@@ -361,11 +373,17 @@ class TemperatureMonitorService : Service() {
                     it.sensor.name.contains("temp", ignoreCase = true)) {
                     
                     val newTemp = it.values[0].toDouble()
+                    android.util.Log.d("TemperatureMonitor", "원시 온도 값: $newTemp°C")
+                    
                     // 유효한 온도 범위 체크 (-50도 ~ 100도)
                     if (newTemp >= -50 && newTemp <= 100) {
                         currentTemperature = newTemp
-                        android.util.Log.d("TemperatureMonitor", "온도 업데이트: ${currentTemperature}°C (센서: ${it.sensor.name})")
+                        android.util.Log.d("TemperatureMonitor", "온도 업데이트 완료: ${currentTemperature}°C (센서: ${it.sensor.name})")
+                    } else {
+                        android.util.Log.d("TemperatureMonitor", "유효하지 않은 온도 값: $newTemp°C")
                     }
+                } else {
+                    android.util.Log.d("TemperatureMonitor", "온도 센서가 아님: ${it.sensor.name}")
                 }
             }
         }
